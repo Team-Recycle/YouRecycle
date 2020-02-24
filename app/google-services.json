@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "760388181991",
+    "firebase_url": "https://yourecycle-97ce3.firebaseio.com",
+    "project_id": "yourecycle-97ce3",
+    "storage_bucket": "yourecycle-97ce3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760388181991:android:c00959f302234bdd3ca742",
+        "android_client_info": {
+          "package_name": "com.example.yourecycle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760388181991-4ipkroq8n73pf0hkn0v2v0aubd4q4fna.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLTdojH-740t-0PnD_FgnxYPSdTxiccrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760388181991-4ipkroq8n73pf0hkn0v2v0aubd4q4fna.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
