@@ -3,6 +3,7 @@ package com.example.yourecycle.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,12 +22,12 @@ public class SignInActivity extends AppCompatActivity {
     private EditText email, password;
     private View no_account, goto_signup, signin;
     private FirebaseAuth mAuth;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
         initializeViews();
     }
 
@@ -39,6 +40,8 @@ public class SignInActivity extends AppCompatActivity {
         goto_signup = findViewById(R.id.sign_up);
         no_account = findViewById(R.id.no_account);
         signin = findViewById(R.id.signin);
+
+        dialog = new ProgressDialog(this);
 
         goto_signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,9 +77,14 @@ public class SignInActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "password field is required!", Toast.LENGTH_SHORT).show();
         }
         else{
+            dialog.setTitle("Attempting Login");
+            dialog.setMessage("Please wait while we log you in.");
+            dialog.setCancelable(false);
+            dialog.show();
             mAuth.signInWithEmailAndPassword(_email, _password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
+                    dialog.dismiss();
                     if (task.isSuccessful()){
                         Toast.makeText(getApplicationContext(), "login successful.", Toast.LENGTH_SHORT).show();
                         finish();

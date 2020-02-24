@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:name=".Helpers.YouRecyclePreference"
         android:theme="@style/AppTheme">
-        <activity android:name=".TermsandConditionsActivity"></activity>
+        <activity android:name=".Activities.TermsandConditionsActivity"/>
         <activity android:name=".Activities.ResetPasswordActivity" />
         <activity android:name=".Activities.SignInActivity">
             <intent-filter>

@@ -8,7 +8,7 @@ public class YouRecyclePreference extends Application {
 
     @Override
     public void onCreate() {
-        super.onCreate();
         FirebaseApp.initializeApp(getApplicationContext());
+        super.onCreate();
     }
 }
