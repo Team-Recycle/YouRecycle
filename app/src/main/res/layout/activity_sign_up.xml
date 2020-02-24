@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    tools:context=".Activities.SignUpActivity">
 
     <RelativeLayout
         android:id="@+id/toolbar"
@@ -43,13 +43,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".SignUpActivity">
+        tools:context=".Activities.SignUpActivity">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".SignUpActivity"
+            tools:context=".Activities.SignUpActivity"
             android:orientation="vertical">
 
             <TextView

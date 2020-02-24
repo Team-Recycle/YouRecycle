@@ -1,8 +1,10 @@
-package com.example.yourecycle;
+package com.example.yourecycle.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.yourecycle.R;
 
 public class SignInActivity extends AppCompatActivity {
 
