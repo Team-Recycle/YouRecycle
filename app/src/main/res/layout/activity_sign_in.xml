@@ -87,7 +87,7 @@
 
 
             <Button
-                android:id="@+id/signup"
+                android:id="@+id/signin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
@@ -138,12 +138,6 @@
                 android:text="Sign up"
                 android:textColor="@color/black"
                 android:layout_gravity="center"/>
-
-
-
-
-
-
 
         </LinearLayout>
 
