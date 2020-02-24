@@ -10,16 +10,17 @@
         android:supportsRtl="true"
         android:name=".Helpers.YouRecyclePreference"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.ResetPasswordActivity"></activity>
-        <activity android:name=".Activities.SignInActivity" />
-        <activity android:name=".Activities.SignUpActivity" />
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name=".TermsandConditionsActivity"></activity>
+        <activity android:name=".Activities.ResetPasswordActivity" />
+        <activity android:name=".Activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.SignUpActivity" />
+        <activity android:name=".Activities.MainActivity" />
     </application>
 
 </manifest>
