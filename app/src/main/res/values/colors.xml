@@ -4,4 +4,15 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+
+    <!-- colors for button style-->
+    <color name="gradient_start_color">#A97FF8</color>
+    <color name="gradient_end_color">#7231C8</color>
+
+    <!-- colors for tab and screen text-->
+    <color name="tab_indicator_gray">#FA6FBA</color>
+    -<color name="intro_title_color">#000000</color>
+    <color name="intro_description_color">#656565</color>
+
 </resources>

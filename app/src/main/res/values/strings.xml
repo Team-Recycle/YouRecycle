@@ -4,4 +4,19 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="long_text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem dignissimos iusto modi, nemo placeat quibusdam rerum tempore? Alias est quae qui quis tempore ullam veniam. At eaque enim explicabo facere fugit maxime minus nobis recusandae voluptate voluptatibus? Consequuntur, similique velit? Accusamus accusantium aliquid animi deserunt et fuga inventore labore laborum maiores minus molestiae nemo possimus quae quia quis quod ratione rem saepe, sunt ullam! Aliquid amet atque aut debitis deleniti facilis, iure laudantium molestias, optio quam, qui sequi sint sit tenetur vel. Architecto commodi eum fugiat praesentium similique, voluptates? Autem consectetur deleniti impedit iste maiores repellat vel. Minima sapiente, suscipit!</string>
+    <string name="title_activity_home_page">HomePageActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

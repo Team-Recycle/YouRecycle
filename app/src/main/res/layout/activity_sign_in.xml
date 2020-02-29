@@ -112,11 +112,8 @@
                 android:gravity="center"
                 android:layout_margin="16dp">
 
-
-
-
                 <TextView
-                    android:id="@+id/terms"
+                    android:id="@+id/forgot_password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Forgotten Passowrd?"
