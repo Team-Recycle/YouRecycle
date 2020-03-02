@@ -49,7 +49,6 @@ public class YouRecyclePreference extends Application {
         }
     }
 
-
     public void setUser(User user) {
         this.user = user;
     }

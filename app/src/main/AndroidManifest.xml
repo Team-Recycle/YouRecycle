@@ -10,10 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.TutorialActivity"></activity>
-        <activity android:name=".Activities.JunkTransactionActivity"></activity>
-        <activity android:name=".Activities.RequestDriverActivity"></activity>
-        <activity android:name=".Activities.LearningActivity"></activity>
+        <activity android:name=".ProductDetails"></activity>
+        <activity android:name=".UploadItem" />
+        <activity android:name=".TransactDashboard" />
+        <activity android:name=".Activities.TutorialActivity" />
+        <activity android:name=".Activities.JunkTransactionActivity" />
+        <activity android:name=".Activities.RequestDriverActivity" />
+        <activity android:name=".Activities.LearningActivity" />
         <activity
             android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main"
