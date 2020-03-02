@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.example.yourecycle.R;
 
-public class TermsandConditionsActivity extends AppCompatActivity {
+public class TermsAndConditionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

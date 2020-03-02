@@ -3,96 +3,100 @@ package com.example.yourecycle.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.yourecycle.Helpers.YouRecyclePreference;
-import com.example.yourecycle.Models.User;
+import com.example.yourecycle.Fragments.HomeFragment;
+import com.example.yourecycle.Fragments.JunkTransactionFragment;
+import com.example.yourecycle.Fragments.LearningFragment;
+import com.example.yourecycle.Fragments.OnFragmentInteractionListener;
+import com.example.yourecycle.Fragments.RequestDriverFragment;
+import com.example.yourecycle.Fragments.TutorialFragment;
 import com.example.yourecycle.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
+import android.view.MenuItem;
 import android.view.View;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.annotation.NonNull;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.view.Menu;
 import android.widget.TextView;
 
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
-    private User user;
-    private AppBarConfiguration mAppBarConfiguration;
-    private View tutorial, learning, request, transact;
+    Fragment homeFragment, learningFragment, tutorialFragment, transactFragment, requestFragment;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        initializeViews();
         setupNavigationDrawer();
+        initializeViews();
+    }
+
+    private void initializeViews() {
+        learningFragment = new LearningFragment();
+        tutorialFragment = new TutorialFragment();
+        transactFragment = new JunkTransactionFragment();
+        requestFragment = new RequestDriverFragment();
+
+        homeFragment = new HomeFragment(new OnFragmentInteractionListener() {
+            @Override
+            public void onFragmentInteraction(Map<String, Object> event) {
+                switch ((int) event.get("name")){
+                    case R.id.nav_request: showFragment(requestFragment); break;
+                    case R.id.nav_transact: showFragment(transactFragment); break;
+                    case R.id.nav_course: showFragment(tutorialFragment); break;
+                    case R.id.nav_learning: showFragment(learningFragment); break;
+                }
+            }
+        });
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, homeFragment)
+                .commit();
+    }
+
+    private void showFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, fragment)
+                .addToBackStack(null).commit();
     }
 
     private void setupNavigationDrawer() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-//                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
-//                .setDrawerLayout(drawer)
-//                .build();
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-//        NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.nav_home: showFragment(homeFragment); break;
+                    case R.id.nav_request: showFragment(requestFragment); break;
+                    case R.id.nav_transact: showFragment(transactFragment); break;
+                    case R.id.nav_course: showFragment(tutorialFragment); break;
+                    case R.id.nav_learning: showFragment(learningFragment); break;
+                    case R.id.nav_change_password: startForgotPasswordActivity(); break;
+                    case R.id.nav_logout: logoutUser(); break;
+                }
+                return false;
+            }
+        });
     }
 
-    private void initializeViews() {
-        user = ((YouRecyclePreference) getApplicationContext()).getUser();
+    private void logoutUser() {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(MainActivity.this, SignInActivity.class));
+        finish();
+    }
 
-        ((TextView) findViewById(R.id.username)).setText(user.getName());
-
-        tutorial = findViewById(R.id.tutorial);
-        learning = findViewById(R.id.learning);
-        request = findViewById(R.id.request_a_driver);
-        transact = findViewById(R.id.junk_transaction);
-
-
-        tutorial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, TutorialActivity.class));
-            }
-        });
-        learning.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LearningActivity.class));
-            }
-        });
-        request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, RequestDriverActivity.class));
-            }
-        });
-        transact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, JunkTransactionActivity.class));
-            }
-        });
-
+    private void startForgotPasswordActivity() {
+        startActivity(new Intent(MainActivity.this, ResetPasswordActivity.class));
     }
 
     @Override
@@ -102,10 +106,4 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-//                || super.onSupportNavigateUp();
-//    }
 }

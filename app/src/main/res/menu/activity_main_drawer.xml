@@ -6,33 +6,47 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
-        <item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />
+            android:id="@+id/nav_faq"
+            android:icon="@drawable/ic_menu_faq"
+            android:title="FAQs" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Pages">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_course"
                 android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_share" />
+                android:title="Course" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_learning"
                 android:icon="@drawable/ic_menu_send"
-                android:title="@string/menu_send" />
+                android:title="Learning" />
+            <item
+                android:id="@+id/nav_request"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Request" />
+            <item
+                android:id="@+id/nav_transact"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Transact" />
         </menu>
     </item>
+
+    <item android:title="Option">
+        <menu>
+            <item
+                android:id="@+id/nav_change_password"
+                android:icon="@drawable/ic_lock_black_24dp"
+                android:title="Change Password" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Logout" />
+        </menu>
+    </item>
+
 
 </menu>
