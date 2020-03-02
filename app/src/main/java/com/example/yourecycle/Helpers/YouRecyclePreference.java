@@ -18,35 +18,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class YouRecyclePreference extends Application {
 
-    private FirebaseAuth mAuth;
     private User user;
 
     @Override
     public void onCreate() {
         FirebaseApp.initializeApp(getApplicationContext());
-        mAuth = FirebaseAuth.getInstance();
-        onStart();
         super.onCreate();
-    }
-
-    protected void onStart() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null){
-            FirebaseFirestore.getInstance().collection("Users")
-                    .document(mAuth.getCurrentUser().getUid())
-                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()){
-                        User user = task.getResult().toObject(User.class);
-                        ((YouRecyclePreference) getApplicationContext()).setUser(user);
-                        Toast.makeText(getApplicationContext(), "login successful.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(YouRecyclePreference.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
-                }
-            });
-        }
     }
 
     public void setUser(User user) {

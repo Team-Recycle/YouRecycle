@@ -8,139 +8,10 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_dehaze_black_24dp"
-            android:layout_marginHorizontal="4dp"
-            android:layout_marginVertical="8dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.2"
-            android:orientation="vertical"
-            android:paddingTop="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Hi"
-                android:textColor="@color/black"
-                android:textSize="28sp"
-                android:layout_marginStart="8dp"/>
-
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Some User"
-                android:layout_marginStart="8dp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="30sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_weight="3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="8dp"
-            android:background="@drawable/home_card_bg">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Welcome"
-                android:textSize="30sp"
-                android:layout_margin="16dp"
-                android:textColor="@color/white"/>
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp">
-
-
-                <TextView
-                    android:id="@+id/tutorial"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="Course"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:textSize="30sp"
-                    android:layout_margin="12dp"
-                    android:background="@drawable/home_card_item_bg"/>
-
-                <TextView
-                    android:id="@+id/learning"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="Learn"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:textSize="30sp"
-                    android:layout_margin="12dp"
-                    android:background="@drawable/home_card_item_bg"/>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp">
-
-                <TextView
-                    android:id="@+id/request_a_driver"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="Request"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:textSize="30sp"
-                    android:layout_margin="12dp"
-                    android:background="@drawable/home_card_item_bg"/>
-
-                <TextView
-                    android:id="@+id/junk_transaction"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="Transact"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:textSize="30sp"
-                    android:layout_margin="12dp"
-                    android:background="@drawable/home_card_item_bg"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
+        android:layout_height="match_parent"/>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -148,6 +19,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:background="@drawable/nav_drawer_bg"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 

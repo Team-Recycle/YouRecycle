@@ -95,7 +95,7 @@ public class SignUpActivity extends AppCompatActivity {
         findViewById(R.id.terms).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this, TermsandConditionsActivity.class));
+                startActivity(new Intent(SignUpActivity.this, TermsAndConditionsActivity.class));
             }
         });
     }
