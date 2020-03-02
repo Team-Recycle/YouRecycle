@@ -33,22 +33,22 @@ public class SignInActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null){
-            FirebaseFirestore.getInstance().collection("Users")
-                    .document(mAuth.getCurrentUser().getUid())
-                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()){
-                        User user = task.getResult().toObject(User.class);
-                        ((YouRecyclePreference) getApplicationContext()).setUser(user);
-                        Toast.makeText(getApplicationContext(), "login successful.", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                        finish();
-                    }
-                }
-            });
-        }
+//        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+//            FirebaseFirestore.getInstance().collection("Users")
+//                    .document(mAuth.getCurrentUser().getUid())
+//                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()){
+//                        User user = task.getResult().toObject(User.class);
+//                        ((YouRecyclePreference) getApplicationContext()).setUser(user);
+//                        Toast.makeText(getApplicationContext(), "login successful.", Toast.LENGTH_SHORT).show();
+//                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+//                        finish();
+//                    }
+//                }
+//            });
+//        }
         super.onStart();
     }
 
