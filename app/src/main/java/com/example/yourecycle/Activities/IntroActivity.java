@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
+import com.example.yourecycle.Adapters.IntroViewPagerAdapter;
 import com.example.yourecycle.R;
 import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;

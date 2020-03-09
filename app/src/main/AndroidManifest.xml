@@ -10,9 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProductDetails"></activity>
-        <activity android:name=".UploadItem" />
-        <activity android:name=".TransactDashboard" />
+        <activity android:name=".Activities.ProductDetailsActivity"></activity>
+        <activity android:name=".Activities.UploadItemActivity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".Activities.IntroActivity"/>
         <activity android:name=".Activities.SplashActivity">
             <intent-filter>
@@ -26,6 +28,7 @@
         <activity android:name=".Activities.ResetPasswordActivity" />
         <activity android:name=".Activities.SignInActivity" />
         <activity android:name=".Activities.SignUpActivity" />
+        <activity android:name=".Activities.ManageProductsActivity" />
     </application>
 
 </manifest>

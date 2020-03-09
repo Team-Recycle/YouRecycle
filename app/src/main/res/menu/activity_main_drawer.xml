@@ -32,6 +32,10 @@
                 android:id="@+id/nav_transact"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Transact" />
+            <item
+                android:id="@+id/nav_notification"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Notifications" />
         </menu>
     </item>
 

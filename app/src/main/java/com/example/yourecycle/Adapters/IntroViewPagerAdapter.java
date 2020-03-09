@@ -1,4 +1,4 @@
-package com.example.yourecycle.Activities;
+package com.example.yourecycle.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.example.yourecycle.Activities.ScreenItem;
 import com.example.yourecycle.R;
 
 public class IntroViewPagerAdapter extends PagerAdapter {

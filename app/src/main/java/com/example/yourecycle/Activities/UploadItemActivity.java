@@ -1,0 +1,341 @@
+package com.example.yourecycle.Activities;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.yourecycle.Helpers.Helper;
+import com.example.yourecycle.Helpers.YouRecyclePreference;
+import com.example.yourecycle.Models.Item;
+import com.example.yourecycle.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class UploadItemActivity extends AppCompatActivity {
+
+    private static final int GALLERY_PICK = 20;
+    private static final int CAMERA_PICTURE = 80;
+    private static final int CAMERA_PERMISSIONS = 120;
+    private static final int GALLERY_PICK_PERMISSIONS = 140;
+    private Uri imageUri;
+    private ProgressDialog progressDialog;
+    private AlertDialog alertDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_upload_item);
+
+        progressDialog = new ProgressDialog(this);
+        alertDialog = new AlertDialog.Builder(this).create();
+
+        final String lastLocation = ((YouRecyclePreference) getApplicationContext()).getDefaultLocation();
+        if (lastLocation != null)
+            ((TextView) findViewById(R.id.address)).setText(lastLocation);
+
+        findViewById(R.id.back_arrow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        findViewById(R.id.add_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TranslateAnimation animation = new TranslateAnimation(0,0,300,0);
+                animation.setDuration(300);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        findViewById(R.id.image_pickers).setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                findViewById(R.id.image_pickers).startAnimation(animation);
+            }
+        });
+
+        findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TranslateAnimation animation = new TranslateAnimation(0,0,0,700);
+                animation.setDuration(300);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        findViewById(R.id.image_pickers).setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                findViewById(R.id.image_pickers).startAnimation(animation);
+            }
+        });
+
+        findViewById(R.id.camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCamera();
+                findViewById(R.id.cancel).callOnClick();
+            }
+        });
+
+
+        findViewById(R.id.gallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGalleryPicker();
+                findViewById(R.id.cancel).callOnClick();
+            }
+        });
+
+        findViewById(R.id.save_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final String address = ((EditText) findViewById(R.id.address)).getText().toString().trim();
+                final String name = ((EditText) findViewById(R.id.product_name)).getText().toString().trim();
+                final String desc = ((EditText) findViewById(R.id.description)).getText().toString().trim();
+
+                if (address.isEmpty()){
+                    Helper.shortToast(getApplicationContext(), "your address is required!.");
+                }
+                else if (name.isEmpty()){
+                    Helper.shortToast(getApplicationContext(), "please enter the name of product you're sharing");
+                }
+                else if (imageUri == null){
+                    Helper.shortToast(getApplicationContext(), "please add an image!.");
+                }
+                else {
+
+                    final String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                    progressDialog.setTitle("Adding...");
+                    progressDialog.setMessage("please wait while we add your item...");
+                    progressDialog.show();
+
+                    final StorageReference reference = FirebaseStorage.getInstance()
+                            .getReference("ProductsDisplayImage")
+                            .child(user_id+Helper.randomString(10)+".jpg");
+
+                    reference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()){
+
+                                final Item item = new Item();
+                                item.setName(name);
+                                item.setDesc(desc);
+                                item.setOwnerId(user_id);
+                                item.setAddress(address);
+                                item.setTimeStamp(new SimpleDateFormat("dd/MM/yyy").format(new Date()));
+                                Helper.log(task.getResult().getUploadSessionUri().toString());
+
+                                reference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        if (task.isSuccessful()){
+                                            Helper.log(task.getResult().toString());
+                                            item.setImageUri(task.getResult().toString());
+
+                                            FirebaseFirestore.getInstance().collection("SharedProducts")
+                                                    .document(user_id)
+                                                    .collection("Items")
+                                                    .add(item).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                    progressDialog.hide();
+
+                                                    if (task.isSuccessful()){
+                                                        Helper.shortToast(getApplicationContext(), "your item was added successfully.");
+                                                        String email = ((YouRecyclePreference) getApplicationContext()).getUser().getEmail();
+                                                        ((YouRecyclePreference) getApplicationContext()).setDefaultLocation(email, address);
+                                                        setResult(RESULT_OK);
+                                                        finish();
+                                                    }
+                                                    else{
+                                                        alertDialog.setMessage(task.getException().getMessage());
+                                                        alertDialog.show();
+                                                    }
+                                                }
+                                            });
+
+
+                                        }else {
+                                            progressDialog.hide();
+
+                                            alertDialog.setMessage(task.getException().getMessage());
+                                            alertDialog.show();
+                                        }
+                                    }
+                                });
+
+                            }
+                            else{
+                                progressDialog.hide();
+
+                                alertDialog.setMessage(task.getException().getMessage());
+                                alertDialog.show();
+                            }
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == CAMERA_PERMISSIONS){
+
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                openCamera();
+            }
+            else{
+                Helper.longToast(getApplicationContext(), "Camera permissions denied!");
+            }
+        }
+
+        if (requestCode == GALLERY_PICK_PERMISSIONS){
+
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                openGalleryPicker();
+            }
+            else{
+                Helper.longToast(getApplicationContext(), "Gallery permissions denied!");
+            }
+        }
+
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+
+            CropImage.activity(uri)
+                    .setAspectRatio(1, 1)
+                    .setMinCropWindowSize(500, 500)
+                    .start(UploadItemActivity.this);
+        }
+
+        if (requestCode == CAMERA_PICTURE && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+
+            CropImage.activity(uri)
+                    .setAspectRatio(1, 1)
+                    .setMinCropWindowSize(500, 500)
+                    .start(UploadItemActivity.this);
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                imageUri = result.getUri();
+                findViewById(R.id.image).setVisibility(View.VISIBLE);
+                ((ImageView) findViewById(R.id.image)).setImageURI(imageUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Helper.log("Error: Crop Error.\nMessage: " + result.getError().getMessage());
+                Helper.longToast(getApplicationContext(), result.getError().getMessage());
+            }
+        }
+    }
+
+    private Uri getImageUri() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        Uri photoURI = FileProvider.getUriForFile(this,
+                "com.example.android.fileprovider",
+                image);
+
+        return photoURI;
+    }
+
+    private void openGalleryPicker() {
+        Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA_PICTURE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (findViewById(R.id.image_pickers).getVisibility() == View.VISIBLE){
+            findViewById(R.id.cancel).callOnClick();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+}

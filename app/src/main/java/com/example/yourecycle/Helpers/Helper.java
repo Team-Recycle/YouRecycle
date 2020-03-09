@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class Helper {
@@ -103,6 +104,17 @@ public class Helper {
         for (String message : messages){
             Log.d("TechupStudio.Recycle", message);
         }
+    }
+
+    public static String randomString(int length) {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        char tempChar;
+        for (int i = 0; i < length; i++){
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
     }
 
 }

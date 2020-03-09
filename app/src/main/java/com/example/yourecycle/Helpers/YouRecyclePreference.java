@@ -1,23 +1,17 @@
 package com.example.yourecycle.Helpers;
 
 import android.app.Application;
-import android.content.Intent;
-import android.widget.Toast;
+import android.content.SharedPreferences;
 
-import androidx.annotation.NonNull;
-
-import com.example.yourecycle.Activities.MainActivity;
-import com.example.yourecycle.Activities.SignInActivity;
 import com.example.yourecycle.Models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class YouRecyclePreference extends Application {
 
+    public static final int MODE_PRIVATE = 0;
+    public static final String DEFAULT_ADDRESS = "DEFAULT_LOCATION";
+    public static final String ADDRESS = "--ADDRESS--";
+    public static final String EMAIL = "--EMAIL--";
     private User user;
 
     @Override
@@ -33,4 +27,21 @@ public class YouRecyclePreference extends Application {
     public User getUser() {
         return this.user;
     }
+
+    public void setDefaultLocation(String email, String location){
+        SharedPreferences preferences = getSharedPreferences(DEFAULT_ADDRESS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(EMAIL, email);
+        editor.putString(ADDRESS, location);
+        editor.apply();
+    }
+
+    public String getDefaultLocation(){
+        SharedPreferences preferences = getSharedPreferences(DEFAULT_ADDRESS, MODE_PRIVATE);
+        if (user.getEmail().equals(preferences.getString(EMAIL, ""))) {
+            return preferences.getString(ADDRESS, null);
+        }
+        return null;
+    }
+
 }
