@@ -1,7 +1,7 @@
 package com.example.yourecycle.Models;
 
 public class Item {
-    String name,  address, desc, imageUri, ownerId, timeStamp;
+    String id, name, address, desc, imageUri, ownerId, ownerName, ownerPhoneNumber, timeStamp;
 
     public Item(String name, String address, String desc, String imageUri, String ownerId) {
         this.name = name;
@@ -11,12 +11,14 @@ public class Item {
         this.imageUri = imageUri;
     }
 
-    public Item() {
-        this.name = name;
-        this.ownerId = ownerId;
-        this.address = address;
-        this.desc = desc;
-        this.imageUri = imageUri;
+    public Item() { }
+
+    public String getID() {
+        return id;
+    }
+
+    public void setID(String itemID) {
+        this.id = itemID;
     }
 
     public String getName() {
@@ -33,6 +35,22 @@ public class Item {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getOwnerPhoneNumber() {
+        return ownerPhoneNumber;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public void setOwnerPhoneNumber(String ownerPhoneNumber) {
+        this.ownerPhoneNumber = ownerPhoneNumber;
     }
 
     public String getAddress() {

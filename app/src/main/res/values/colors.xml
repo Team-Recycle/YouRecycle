@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#D81B60</color>
     <color name="black">#000000</color>
     <color name="transparent_black">#D2000000</color>
@@ -12,6 +12,8 @@
     <!-- colors for button style-->
     <color name="gradient_start_color">#A97FF8</color>
     <color name="gradient_end_color">#7231C8</color>
+    <color name="shimmer_dark">#5C5757</color>
+    <color name="shimmer_light">#C4C1C9</color>
 
     <!-- colors for tab and screen text-->
     <color name="tab_indicator_gray">#FA6FBA</color>

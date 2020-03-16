@@ -8,14 +8,56 @@
     android:background="@color/fadedWhite"
     tools:context=".Activities.SignUpActivity">
 
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_alignParentTop="true"
+    <RelativeLayout
+        android:id="@+id/toolbars"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Manage Products"
-        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"/>
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Manage Products"
+            android:visibility="visible"
+            app:navigationIcon="@drawable/ic_arrow_back_black_24dp"/>
+
+        <LinearLayout
+            android:layout_alignParentTop="true"
+            android:id="@+id/selection_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/selectionsBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:layout_margin="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 selected"
+                android:layout_margin="8dp"
+                android:layout_weight="1"/>
+
+            <CheckBox
+                android:id="@+id/globalCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -26,7 +68,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_list_RV"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/toolbars"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -51,6 +93,17 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/white"
+        android:layout_margin="8dp"
+        android:text="delete"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>

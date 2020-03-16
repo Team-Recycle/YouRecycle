@@ -2,6 +2,7 @@ package com.example.yourecycle.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 public class HomeFragment extends Fragment {
@@ -52,6 +54,12 @@ public class HomeFragment extends Fragment {
         View request = findViewById(R.id.request_a_driver);
         View transact = findViewById(R.id.junk_transaction);
 
+        findViewById(R.id.openDrawer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((DrawerLayout) getActivity().findViewById(R.id.drawer_layout)).openDrawer(Gravity.LEFT);
+            }
+        });
 
         tutorial.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,10 +8,6 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_faq"
-            android:icon="@drawable/ic_menu_faq"
-            android:title="FAQs" />
     </group>
 
     <item android:title="Pages">
@@ -32,10 +28,6 @@
                 android:id="@+id/nav_transact"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Transact" />
-            <item
-                android:id="@+id/nav_notification"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Notifications" />
         </menu>
     </item>
 

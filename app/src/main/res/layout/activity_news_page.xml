@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleMarginStart="10dp"
+                app:expandedTitleMarginEnd="10dp"
+                android:fitsSystemWindows="true">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_collapseMode="parallax">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="300dp"
+                        android:background="@color/black"
+                        android:scaleType="centerCrop" />
+
+                </RelativeLayout>
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+                    app:layout_collapseMode="pin" />
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:contentDescription="unliked"
+            app:layout_anchor="@+id/app_bar"
+            app:layout_anchorGravity="bottom|right|end"
+            app:srcCompat="@drawable/ic_share_white_24dp"
+            app:fabCustomSize="50dp"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_margin="16dp"
+                    android:text="Some rally weird title"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"/>
+
+                <TextView
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="24dp"
+                    android:textSize="18dp"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur esse, fuga ipsam libero maxime nesciunt odio recusandae tempore velit vero. Ab, amet beatae distinctio dolore dolorem dolores enim eos, eum eveniet, facere fuga harum hic in ipsam ipsum laboriosam laborum libero nulla numquam porro praesentium provident quaerat quasi ratione recusandae reiciendis sapiente vel veniam vitae voluptates. Facilis illum minus molestiae totam voluptates. Iure maiores maxime vero. Aliquid consectetur consequuntur cupiditate delectus dolore dolorem esse expedita facere, magni mollitia possimus provident reprehenderit, repudiandae sint sit ut, voluptatibus? Consequuntur delectus deserunt dolor, doloremque ducimus eos eum, exercitationem iure magni maxime molestiae nemo nobis obcaecati quaerat quia quis sapiente tempore voluptatum. Aliquam atque consequatur, distinctio eius, facere fuga magni odit quae quos reprehenderit repudiandae soluta voluptate, voluptatem? Aliquam asperiores at beatae consequatur consequuntur deleniti dolorem doloribus et eum in ipsa iure magnam maxime minus natus obcaecati placeat quaerat quis quod quos reiciendis repellat reprehenderit, sapiente tempora vero voluptas voluptatem. Amet architecto consectetur cupiditate deleniti eius expedita id, in laboriosam maiores, maxime necessitatibus odio perferendis provident quas rem saepe similique sint, unde. Aut commodi consequatur cumque dicta et illum pariatur reprehenderit rerum, veniam veritatis! Delectus earum error harum illo neque nihil nobis, quia rem."/>
+
+                <Button
+                    android:id="@+id/read_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="read more"
+                    android:background="@drawable/button_red_bg"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="50dp"/>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>

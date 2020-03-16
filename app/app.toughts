@@ -1,0 +1,13 @@
+http://newsapi.org/v2/everything?q=recycle&from=2020-02-14&sortBy=publishedAt&apiKey=7731fba84a8a40dcbbfd25c8aee61530
+
+
+Messages
+    user_id:
+        friend_id:
+            message
+            message
+            message
+        friend_id:
+            message
+            message
+            message

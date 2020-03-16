@@ -1,16 +1,23 @@
 package com.example.yourecycle.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -24,21 +31,29 @@ import android.widget.TextView;
 import com.example.yourecycle.Helpers.Helper;
 import com.example.yourecycle.Helpers.YouRecyclePreference;
 import com.example.yourecycle.Models.Item;
+import com.example.yourecycle.Models.User;
 import com.example.yourecycle.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UploadItemActivity extends AppCompatActivity {
 
@@ -49,11 +64,14 @@ public class UploadItemActivity extends AppCompatActivity {
     private Uri imageUri;
     private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_item);
+
+        user = ((YouRecyclePreference) getApplicationContext()).getUser();
 
         progressDialog = new ProgressDialog(this);
         alertDialog = new AlertDialog.Builder(this).create();
@@ -123,7 +141,21 @@ public class UploadItemActivity extends AppCompatActivity {
         findViewById(R.id.camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openCamera();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+
+                    if (ContextCompat.checkSelfPermission(UploadItemActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                            ContextCompat.checkSelfPermission(UploadItemActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                        ActivityCompat.requestPermissions(UploadItemActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_PERMISSIONS);
+                    }
+                    else {
+                        openCamera();
+                    }
+                }
+                else{
+                    openCamera();
+                }
+                
                 findViewById(R.id.cancel).callOnClick();
             }
         });
@@ -132,7 +164,18 @@ public class UploadItemActivity extends AppCompatActivity {
         findViewById(R.id.gallery).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGalleryPicker();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+
+                    if (ContextCompat.checkSelfPermission(UploadItemActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                        ActivityCompat.requestPermissions(UploadItemActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, GALLERY_PICK_PERMISSIONS);
+                    }
+                    else {
+                        openGalleryPicker();
+                    }
+                }
+                else{
+                    openGalleryPicker();
+                }
                 findViewById(R.id.cancel).callOnClick();
             }
         });
@@ -166,6 +209,7 @@ public class UploadItemActivity extends AppCompatActivity {
                             .getReference("ProductsDisplayImage")
                             .child(user_id+Helper.randomString(10)+".jpg");
 
+
                     reference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -176,8 +220,9 @@ public class UploadItemActivity extends AppCompatActivity {
                                 item.setDesc(desc);
                                 item.setOwnerId(user_id);
                                 item.setAddress(address);
+                                item.setOwnerPhoneNumber(((YouRecyclePreference) getApplicationContext()).getUser().getPhone());
+                                item.setOwnerName(((YouRecyclePreference) getApplicationContext()).getUser().getName());
                                 item.setTimeStamp(new SimpleDateFormat("dd/MM/yyy").format(new Date()));
-                                Helper.log(task.getResult().getUploadSessionUri().toString());
 
                                 reference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                     @Override
@@ -187,19 +232,48 @@ public class UploadItemActivity extends AppCompatActivity {
                                             item.setImageUri(task.getResult().toString());
 
                                             FirebaseFirestore.getInstance().collection("SharedProducts")
-                                                    .document(user_id)
-                                                    .collection("Items")
                                                     .add(item).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                    progressDialog.hide();
+                                                public void onComplete(@NonNull final Task<DocumentReference> task) {
 
                                                     if (task.isSuccessful()){
                                                         Helper.shortToast(getApplicationContext(), "your item was added successfully.");
                                                         String email = ((YouRecyclePreference) getApplicationContext()).getUser().getEmail();
                                                         ((YouRecyclePreference) getApplicationContext()).setDefaultLocation(email, address);
-                                                        setResult(RESULT_OK);
-                                                        finish();
+
+                                                    final Map<String, Object> properties = user.getProperties();
+                                                    Object obj = user.getProperties().get("uploadedItems");
+                                                    List<String> arr;
+                                                    if (obj != null){
+                                                        arr = (List<String>) obj;
+                                                        arr.add(task.getResult().getId());
+                                                    }
+                                                    else {
+                                                        arr = new ArrayList<>();
+                                                        arr.add(task.getResult().getId());
+                                                    }
+                                                    properties.put("uploadedItems", arr);
+
+                                                    FirebaseFirestore.getInstance().collection("Users")
+                                                                .document(user_id).update("properties", properties)
+                                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task1) {
+                                                                        if (task1.isSuccessful()){
+                                                                            setResult(RESULT_OK);
+                                                                            user.setProperties(properties);
+                                                                            ((YouRecyclePreference) getApplicationContext()).setUser(user);
+                                                                            finish();
+                                                                        }
+                                                                        else{
+                                                                            alertDialog.setMessage(task1.getException().getMessage());
+                                                                            alertDialog.show();
+                                                                            task.getResult().delete();
+                                                                            reference.delete();
+                                                                        }
+                                                                    }
+                                                                });
+
                                                     }
                                                     else{
                                                         alertDialog.setMessage(task.getException().getMessage());
@@ -277,12 +351,20 @@ public class UploadItemActivity extends AppCompatActivity {
         }
 
         if (requestCode == CAMERA_PICTURE && resultCode == RESULT_OK) {
-            Uri uri = data.getData();
 
-            CropImage.activity(uri)
-                    .setAspectRatio(1, 1)
-                    .setMinCropWindowSize(500, 500)
-                    .start(UploadItemActivity.this);
+            Uri uri = data.getData();
+            Uri tempUri = null;
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+            if (uri == null) {
+                tempUri = getImageUri(getApplicationContext(), (Bitmap) data.getExtras().get("data"));
+            }
+
+            if (data.getData() != null || tempUri != null) {
+                CropImage.activity((uri == null) ? tempUri: uri)
+                        .setAspectRatio(1, 1)
+                        .setMinCropWindowSize(500, 500)
+                        .start(UploadItemActivity.this);
+            }
         }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -298,23 +380,27 @@ public class UploadItemActivity extends AppCompatActivity {
         }
     }
 
-    private Uri getImageUri() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
 
-        // Save a file: path for use with ACTION_VIEW intents
-        Uri photoURI = FileProvider.getUriForFile(this,
-                "com.example.android.fileprovider",
-                image);
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
 
-        return photoURI;
+
+    public String getRealPathFromURI(Uri uri) {
+        String path = "";
+        if (getContentResolver() != null) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                path = cursor.getString(idx);
+                cursor.close();
+            }
+        }
+        return path;
     }
 
     private void openGalleryPicker() {
